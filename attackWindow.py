@@ -35,11 +35,6 @@ class Attack(QMainWindow):
 
     def attack_opponent(self):
         """Send the coordinate to Server to hit the other player"""
-        hit_info = {}
-        items = self.attack_table.selectedItems()
-        for item in items:
-            hit_info["coordinate"] = (item.pos_x, item.pos_y)
-            item.setBackground(Qt.blue)
-        hit_info["username"] = self.username
-        self.client.hit_opponent(json.dumps(hit_info))
+        item = self.attack_table.itemAt(self.attack_table.currentRow(), self.attack_table.currentColumn())
+        item.setBackground(Qt.blue)
         self.hide()

@@ -1,7 +1,6 @@
 import sys
 import vlc
 import json
-import xmlrpc.client
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic

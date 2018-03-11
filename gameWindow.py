@@ -29,6 +29,7 @@ class Game(QMainWindow):
             self.attack_button.setEnabled(True)
 
         self.attack_button.clicked.connect(self.show_rival_table)
+        self.player_table.cellClicked.connect(self.player_table.clearSelection)
 
     def populate_board(self):
         """Populate all the cells with Coordinate objects"""
@@ -80,7 +81,7 @@ class Game(QMainWindow):
             self.close()
         else:
             self.attack_button.setEnabled(False)
-            self.attack = Attack(self.lang, self.username, self.server, self.ip_address)
+            self.attack = Attack(self.lang, self.username)
             self.attack.show()
 
     def message_winner(self):

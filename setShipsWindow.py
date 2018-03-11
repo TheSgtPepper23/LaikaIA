@@ -3,6 +3,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow
 from logic import Coordinate, Ship
 from internationalization import LANGUAGE
+import vlc
 import time
 
 class SetShips(QMainWindow):
@@ -18,6 +19,7 @@ class SetShips(QMainWindow):
         self.reload_text()
         self.populate_board()
         self.ready_button.setEnabled(False)
+        self.error_sound = vlc.MediaPlayer("resources/error.mp3")
 
         self.rotate_button.clicked.connect(self.rotate)
         self.clear_button.clicked.connect(self.clear_board)
@@ -67,6 +69,7 @@ class SetShips(QMainWindow):
         self.ship_31.setAutoExclusive(True)
         self.ship_11.setEnabled(True)
         self.ship_11.setAutoExclusive(True)
+        self.board.clearSelection()
 
     def deselect_sizes(self):
         """Mark al the ship buttons as unchecked."""
@@ -123,8 +126,15 @@ class SetShips(QMainWindow):
                 self.ship_52.setEnabled(False)
                 self.deselect_sizes()
                 self.add_ships(self.board.selectedItems())
+                place_sound = vlc.MediaPlayer("resources/place.mp3")
+                place_sound.play()
             else:
                 self.board.clearSelection()
+                error_sound = vlc.MediaPlayer("resources/error.mp3")
+                error_sound.play()
+        else:
+            error_sound = vlc.MediaPlayer("resources/error.mp3")
+            error_sound.play()
 
     def place_41(self, row, col):
         """Print the 4x1 ship on the board based on the upright variable."""
@@ -140,8 +150,15 @@ class SetShips(QMainWindow):
                 self.ship_41.setEnabled(False)
                 self.deselect_sizes()
                 self.add_ships(self.board.selectedItems())
+                place_sound = vlc.MediaPlayer("resources/place.mp3")
+                place_sound.play()
             else:
                 self.board.clearSelection()
+                error_sound = vlc.MediaPlayer("resources/error.mp3")
+                error_sound.play()
+        else:
+            error_sound = vlc.MediaPlayer("resources/error.mp3")
+            error_sound.play()
 
     def place_31(self, row, col):
         """Print the 3x1 ship on the board based on the upright variable."""
@@ -157,8 +174,15 @@ class SetShips(QMainWindow):
                 self.ship_31.setEnabled(False)
                 self.deselect_sizes()
                 self.add_ships(self.board.selectedItems())
+                place_sound = vlc.MediaPlayer("resources/place.mp3")
+                place_sound.play()
             else:
                 self.board.clearSelection()
+                error_sound = vlc.MediaPlayer("resources/error.mp3")
+                error_sound.play()
+        else:
+            error_sound = vlc.MediaPlayer("resources/error.mp3")
+            error_sound.play()
 
     def place_33(self, row, col):
         """Print the 3x3 ship on the board."""
@@ -171,8 +195,15 @@ class SetShips(QMainWindow):
                 self.ship_33.setEnabled(False)
                 self.deselect_sizes()
                 self.add_ships(self.board.selectedItems())
+                place_sound = vlc.MediaPlayer("resources/place.mp3")
+                place_sound.play()
             else:
                 self.board.clearSelection()
+                error_sound = vlc.MediaPlayer("resources/error.mp3")
+                error_sound.play()
+        else:
+            error_sound = vlc.MediaPlayer("resources/error.mp3")
+            error_sound.play()
 
     def place_11(self, row, col):
         """Print the 1x1 ship on the board."""
@@ -182,8 +213,12 @@ class SetShips(QMainWindow):
             self.ship_11.setEnabled(False)
             self.deselect_sizes()
             self.add_ships(self.board.selectedItems())
+            place_sound = vlc.MediaPlayer("resources/place.mp3")
+            place_sound.play()
         else:
             self.board.clearSelection()
+            error_sound = vlc.MediaPlayer("resources/error.mp3")
+            error_sound.play()
 
     def select_cells(self, row, col):
         """It's called when a cell is clicked on the board."""
