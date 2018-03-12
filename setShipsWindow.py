@@ -241,10 +241,13 @@ class SetShips(QMainWindow):
         for item in items:
             item.free = False
             item.setBackground(Qt.red)
+            print(str(item.column()) + str(item.row()))
 
     def go_to_play(self):
         """send a signal to the other player to pass to the next window"""
         from gameWindow import Game
         self.game_window = Game(self.lang, self.side, self.ships, self.username)
         self.game_window.show()
+        for ship in self.ships:
+            print (ship)
         self.close()

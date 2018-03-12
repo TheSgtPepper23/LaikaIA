@@ -6,7 +6,7 @@ from PyQt5 import uic
 from internationalization import LANGUAGE
 from logic import Hash
 from windows.message import Message
-from DatabaseAccess import DbMethods
+from databaseAccess import DbMethods
 
 
 class LogIn(QMainWindow):

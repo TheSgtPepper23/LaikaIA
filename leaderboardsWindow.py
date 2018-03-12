@@ -1,7 +1,7 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 from internationalization import LANGUAGE
-from DatabaseAccess import DbMethods
+from databaseAccess import DbMethods
 
 class Leaderboards(QMainWindow):
     def __init__(self, lang):

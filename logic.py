@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtWidgets import QTableWidgetItem, QTableWidget
 import hashlib
 
 class Coordinate(QTableWidgetItem):
@@ -54,12 +54,3 @@ class Hash():
     def encrypt(text):
         return hashlib.sha256(text.encode()).hexdigest()
             
-
-
-
-
-
-
-
-
-
