@@ -1,4 +1,4 @@
-from Models import User, Score
+from models import User, Score
 from datetime import date
 from playhouse.shortcuts import model_to_dict
 import peewee as pw
