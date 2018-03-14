@@ -19,4 +19,4 @@ class Score(MySQLModel):
     id_score = pw.PrimaryKeyField()
     score = pw.IntegerField()
     date = pw.DateField()
-    id_user = pw.ForeignKeyField(rel_model=User, db_column="id_user")
+    id_user = pw.ForeignKeyField(User, db_column = "id_user")

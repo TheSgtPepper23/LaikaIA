@@ -47,15 +47,14 @@ class Game(QMainWindow):
     def hit_coordinate(self):
         """Receive a signal from the server and hit a coordinate of the player_table"""
         if not self.enemySons:
-            self.enemySons = self.agente.hitPlayer(self.enemySons)
+            self.enemySons = self.agente.hitPlayer()
         coordHit = self.enemySons.pop(0)
-        self.player_table.clearSelection()
-        self.attack_button.setEnabled(True)
         self.player_table.item(coordHit.pos_x, coordHit.pos_y).setBackground(Qt.red)
+        self.attack_button.setEnabled(True)
         for ship in self.ships:
             if ship.check_position(coordHit) == True:
                 ship.hit(coordHit)
-                if check_fleet == False:
+                if self.check_fleet == False:
                     print("Ganó la IA")
 
     def check_fleet(self):

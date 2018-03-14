@@ -45,12 +45,11 @@ class Attack(QMainWindow):
 
     def attack_opponent(self):
         """Send the coordinate to Server to hit the other player"""
-        item = self.attack_table.itemAt(self.attack_table.currentRow(), self.attack_table.currentColumn())
-        item.setBackground(Qt.blue)
-        coordHit = item
+        self.attack_table.item(self.attack_table.currentRow(), self.attack_table.currentColumn()).setBackground(Qt.blue)
+        coordHit = self.attack_table.itemAt(self.attack_table.currentRow(), self.attack_table.currentColumn())
         for ship in self.enemyShips:
             if ship.check_position(coordHit) == True:
                 ship.hit(coordHit)
-                if check_enemy_fleet == False:
+                if self.check_enemy_fleet == False:
                     print("Ganó Laglo")
         self.hide()

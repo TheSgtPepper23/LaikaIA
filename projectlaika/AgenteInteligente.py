@@ -9,35 +9,29 @@ class Agente:
         self.upright = False
 
     def setShips(self):
-        print("Ya llegueeeeeee")
         while True:
             coordinate = self.random_cell()
             if self.place_52(coordinate.pos_x, coordinate.pos_y) == True:
-                print("52")
                 break
         
         while True:
             coordinate = self.random_cell()
             if self.place_41(coordinate.pos_x, coordinate.pos_y) == True:
-                print("41")
                 break
 
         while True:
             coordinate = self.random_cell()
             if self.place_31(coordinate.pos_x, coordinate.pos_y) == True:
-                print("31")
                 break
 
         while True:
             coordinate = self.random_cell()
             if self.place_33(coordinate.pos_x, coordinate.pos_y) == True:
-                print("33")
                 break
 
         while True:
             coordinate = self.random_cell()
             if self.place_11(coordinate.pos_x, coordinate.pos_y) == True:
-                print("11")
                 break
         
         return self.ships
@@ -72,7 +66,6 @@ class Agente:
 
         return response
             
-
     def place_ship(self, cells):
         for cell in cells:
             self.occupied.append(cell)
@@ -169,22 +162,16 @@ class Agente:
         else:
             result = False
         return result
-
-    def generateSons(self, coord):
-        temp = []
-        for i in range(-1, 2):
-            for j in range(1, -2):
-                temp_coord = Coordinate(coord.pos_x + i, coord.pos_y + j)
-                if self.boundaries(temp_coord.pos_x, temp_coord.pos_y, 1) and temp_coord not in self.hitted:
-                    self.temp.append(temp_coord)
-        print(temp)
-        return temp
         
-    def hitPlayer(self, attackQueue):
-        barcos = []
+    def hitPlayer(self):
+        temp = []
         while True:
             coord = self.random_cell()
             if coord not in self.hitted:
-                barcos = self.generateSons(coord)
+                for i in range(-1, 2):
+                    for j in range(-1, 2):
+                        temp_coord = Coordinate(coord.pos_x + i, coord.pos_y + j)
+                        if self.boundaries(temp_coord.pos_x, temp_coord.pos_y, 1) and temp_coord not in self.hitted:
+                            temp.append(temp_coord)
                 break
-        return barcos
+        return temp
