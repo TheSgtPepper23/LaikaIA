@@ -2,16 +2,46 @@ from logic import Coordinate, Ship
 import random
 
 class Agente:
-    def __init__(self, name, turn):
-        self.name = name
-        self.turn = turn
+    def __init__(self):
         self.ships = []
         self.occupied = []
-        self.board = IA_Board()
+        self.hitted = []
         self.upright = False
 
-    def setShips():
-        print("Se encarga de colocar los barcos utilizando todos los métodos que se encuentran abajo")
+    def setShips(self):
+        print("Ya llegueeeeeee")
+        while True:
+            coordinate = self.random_cell()
+            if self.place_52(coordinate.pos_x, coordinate.pos_y) == True:
+                print("52")
+                break
+        
+        while True:
+            coordinate = self.random_cell()
+            if self.place_41(coordinate.pos_x, coordinate.pos_y) == True:
+                print("41")
+                break
+
+        while True:
+            coordinate = self.random_cell()
+            if self.place_31(coordinate.pos_x, coordinate.pos_y) == True:
+                print("31")
+                break
+
+        while True:
+            coordinate = self.random_cell()
+            if self.place_33(coordinate.pos_x, coordinate.pos_y) == True:
+                print("33")
+                break
+
+        while True:
+            coordinate = self.random_cell()
+            if self.place_11(coordinate.pos_x, coordinate.pos_y) == True:
+                print("11")
+                break
+        
+        return self.ships
+
 
     def random_cell(self):
         pos_x = random.randint(0, 9)
@@ -47,11 +77,12 @@ class Agente:
         for cell in cells:
             self.occupied.append(cell)
         ship = Ship(cells)
-        ships.append(ship)
+        self.ships.append(ship)
     
     def place_52(self, row, col):
         """Print the 5x2 ship on the board based on the upright variable."""
         coordinates = []
+        result = True
         if self.boundaries (row, col, 5, 2):
             if self.upright == False:
                 for x in range(5):
@@ -64,10 +95,16 @@ class Agente:
 
             if self.avalaible_cells(coordinates) == True:
                 self.place_ship(coordinates)
+            else:
+                result = False
+        else:
+            result = False
+        return result
 
     def place_41(self, row, col):
         """Print the 4x1 ship on the board based on the upright variable."""
         coordinates = []
+        result = True
         if self.boundaries(row, col, 4):
             if self.upright == False:
                 for i in range(4):
@@ -78,10 +115,16 @@ class Agente:
 
             if self.avalaible_cells(coordinates) == True:
                 self.place_ship(coordinates)
+            else:
+                result = False
+        else:
+            result = False
+        return result        
 
     def place_31(self, row, col):
         """Print the 3x1 ship on the board based on the upright variable."""
         coordinates = []
+        result = True
         if self.boundaries(row, col, 3):
             if self.upright == False:
                 for i in range(3):
@@ -91,21 +134,57 @@ class Agente:
                     coordinates.append(Coordinate(row + i, col))
             if self.avalaible_cells(coordinates) == True:
                 self.place_ship(coordinates)
+            else:
+                result = False
+        else:
+            result = False
+        return result
+                
 
     def place_33(self, row, col):
         """Print the 3x3 ship on the board."""
         coordinates = []
+        result = True
         if self.boundaries(row, col, 3, 3):
             for x in range(3):
                 for y in range(3):
                     coordinates.append(Coordinate(row + y, col + x))
             if self.avalaible_cells(coordinates) == True:
-                self.add_ships(coordinates)
+                self.place_ship(coordinates)
+            else:
+                result = False
+        else:
+            result = False
+        return result
+                
 
     def place_11(self, row, col):
         """Print the 1x1 ship on the board."""
         coordinates = []
+        result = True
+
         coordinates.append(Coordinate(row, col))
         if self.avalaible_cells(coordinates) == True:
-            self.add_ships(coordinates)
+            self.place_ship(coordinates)
+        else:
+            result = False
+        return result
+
+    def generateSons(self, coord):
+        temp = []
+        for i in range(-1, 2):
+            for j in range(1, -2):
+                temp_coord = Coordinate(coord.pos_x + i, coord.pos_y + j)
+                if self.boundaries(temp_coord.pos_x, temp_coord.pos_y, 1) and temp_coord not in self.hitted:
+                    self.temp.append(temp_coord)
+        print(temp)
+        return temp
         
+    def hitPlayer(self, attackQueue):
+        barcos = []
+        while True:
+            coord = self.random_cell()
+            if coord not in self.hitted:
+                barcos = self.generateSons(coord)
+                break
+        return barcos

@@ -7,11 +7,12 @@ from logic import Coordinate
 
 
 class Attack(QMainWindow):
-    def __init__(self, language, username):
+    def __init__(self, language, username, enemyShips):
         QMainWindow.__init__(self)
         uic.loadUi("windows/Attack.ui", self)
         self.username = username
         self.lang = language
+        self.enemyShips = enemyShips
         self.reload_text()
         self.populate_board()
         self.attack_table.cellClicked.connect(self.enable_attack)
@@ -33,8 +34,23 @@ class Attack(QMainWindow):
         """Enable the attack button for Attack"""
         self.attack_button.setEnabled(True)
 
+    def check_enemy_fleet(self):
+        """Check the enemy survivor ships"""
+        if len(self.enemyShips) > 0:
+            response = False
+            for ship in self.enemyShips:
+                if ship.afloat == True:
+                    response = True
+            return response
+
     def attack_opponent(self):
         """Send the coordinate to Server to hit the other player"""
         item = self.attack_table.itemAt(self.attack_table.currentRow(), self.attack_table.currentColumn())
         item.setBackground(Qt.blue)
+        coordHit = item
+        for ship in self.enemyShips:
+            if ship.check_position(coordHit) == True:
+                ship.hit(coordHit)
+                if check_enemy_fleet == False:
+                    print("Ganó Laglo")
         self.hide()

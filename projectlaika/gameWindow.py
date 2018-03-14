@@ -9,18 +9,24 @@ from attackWindow import Attack
 from windows.message import Message
 from winWindow import Win
 from looseWindow import Loose
+from agenteInteligente import Agente
 
 class Game(QMainWindow):
-    def __init__(self, language, side, ships, username):
+    def __init__(self, language, side, ships, username, enemyShips):
         QMainWindow.__init__(self)
         uic.loadUi("windows/Game.ui", self)
         self.username = username
         self.lang = language
         self.side = side
         self.ships = ships
+        self.enemyShips = enemyShips
+        self.enemySons = []
         self.reload_text()
         self.determine_icon_side()
         self.populate_board()
+        self.agente = Agente()
+        self.agente.ships = enemyShips
+        self.attack = Attack(self.lang, self.username, self.enemyShips)
         for ship in self.ships:
             for coordinate, _ in ship.positions.items():
                 self.player_table.item(coordinate.pos_x, coordinate.pos_y).setBackground(Qt.blue)
@@ -38,17 +44,19 @@ class Game(QMainWindow):
                 coord = Coordinate(row, col)
                 self.player_table.setItem(row, col, coord)
 
-    def hit_coordinate(self, hit_info):
+    def hit_coordinate(self):
         """Receive a signal from the server and hit a coordinate of the player_table"""
+        if not self.enemySons:
+            self.enemySons = self.agente.hitPlayer(self.enemySons)
+        coordHit = self.enemySons.pop(0)
         self.player_table.clearSelection()
         self.attack_button.setEnabled(True)
-        hit_info = json.loads(hit_info)
-        x, y = hit_info["coordinate"]
-        coordinate = Coordinate(x, y)
-        self.player_table.item(coordinate.pos_x, coordinate.pos_y).setBackground(Qt.red)
+        self.player_table.item(coordHit.pos_x, coordHit.pos_y).setBackground(Qt.red)
         for ship in self.ships:
-            if ship.check_position(coordinate) == True:
-                ship.hit(coordinate)
+            if ship.check_position(coordHit) == True:
+                ship.hit(coordHit)
+                if check_fleet == False:
+                    print("Ganó la IA")
 
     def check_fleet(self):
         """Check that there are still surviving ships"""
@@ -77,14 +85,7 @@ class Game(QMainWindow):
         if self.check_fleet() == False:
             self.lose_window = Loose(self.lang)
             self.lose_window.show()
-            self.client.set_winner(json.dumps(self.username))
-            self.close()
         else:
             self.attack_button.setEnabled(False)
-            self.attack = Attack(self.lang, self.username)
+            self.hit_coordinate()
             self.attack.show()
-
-    def message_winner(self):
-        """Shows the winner message"""
-        self.win_window.show()
-        self.close()

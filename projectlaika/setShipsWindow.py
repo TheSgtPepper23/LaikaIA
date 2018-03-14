@@ -16,6 +16,7 @@ class SetShips(QMainWindow):
         self.side = side
         self.upright = False
         self.ships = []
+        self.enemyShips = []
         self.reload_text()
         self.populate_board()
         self.ready_button.setEnabled(False)
@@ -241,13 +242,14 @@ class SetShips(QMainWindow):
         for item in items:
             item.free = False
             item.setBackground(Qt.red)
-            print(str(item.column()) + str(item.row()))
 
     def go_to_play(self):
         """send a signal to the other player to pass to the next window"""
         from gameWindow import Game
-        self.game_window = Game(self.lang, self.side, self.ships, self.username)
+        from agenteInteligente import Agente
+
+        enemy = Agente()
+        self.enemyShips = enemy.setShips()
+        self.game_window = Game(self.lang, self.side, self.ships, self.username, self.enemyShips)
         self.game_window.show()
-        for ship in self.ships:
-            print (ship)
         self.close()
