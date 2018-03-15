@@ -61,7 +61,11 @@ class Attack(QMainWindow):
             for ship in self.enemyShips:
                 if ship.check_position(coordHit) == True:
                     ship.hit(coordHit)
-                    if self.check_enemy_fleet == False:
-                        self.win_window = Win(self.lang)
-                        self.win_window.show()
+            print("LLega")
+            if self.check_enemy_fleet() == False:
+                print("Ganaste")
+                self.win_window = Win(self.lang)
+                self.win_window.show()
             self.hide()
+        
+            
