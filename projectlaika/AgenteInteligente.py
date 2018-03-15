@@ -172,6 +172,7 @@ class Agente:
                     for j in range(-1, 2):
                         temp_coord = Coordinate(coord.pos_x + i, coord.pos_y + j)
                         if self.boundaries(temp_coord.pos_x, temp_coord.pos_y, 1) and temp_coord not in self.hitted:
+                            self.hitted.append(temp_coord)
                             temp.append(temp_coord)
                 break
         return temp

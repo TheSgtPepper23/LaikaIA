@@ -4,6 +4,7 @@ from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 from internationalization import LANGUAGE
 from logic import Coordinate
+import vlc
 
 
 class Attack(QMainWindow):
@@ -13,6 +14,7 @@ class Attack(QMainWindow):
         self.username = username
         self.lang = language
         self.enemyShips = enemyShips
+        self.clicked = []
         self.reload_text()
         self.populate_board()
         self.attack_table.cellClicked.connect(self.enable_attack)
@@ -45,11 +47,17 @@ class Attack(QMainWindow):
 
     def attack_opponent(self):
         """Send the coordinate to Server to hit the other player"""
-        self.attack_table.item(self.attack_table.currentRow(), self.attack_table.currentColumn()).setBackground(Qt.blue)
-        coordHit = self.attack_table.itemAt(self.attack_table.currentRow(), self.attack_table.currentColumn())
-        for ship in self.enemyShips:
-            if ship.check_position(coordHit) == True:
-                ship.hit(coordHit)
-                if self.check_enemy_fleet == False:
-                    print("Ganó Laglo")
-        self.hide()
+        coordHit = self.attack_table.item(self.attack_table.currentRow(), self.attack_table.currentColumn())
+        if coordHit in self.clicked:
+            self.attack_table.clearSelection()
+            error_sound = vlc.MediaPlayer("resources/error.mp3")
+            error_sound.play()
+        else:
+            self.attack_table.item(self.attack_table.currentRow(), self.attack_table.currentColumn()).setBackground(Qt.black)
+            self.clicked.append(coordHit)
+            for ship in self.enemyShips:
+                if ship.check_position(coordHit) == True:
+                    ship.hit(coordHit)
+                    if self.check_enemy_fleet == False:
+                        print("Ganó Laglo")
+            self.hide()
