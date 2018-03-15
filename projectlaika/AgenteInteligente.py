@@ -167,7 +167,9 @@ class Agente:
             self.place_ship(coordinates)
         else:
             result = False
+        print(coordinates[0])
         return result
+        
         
     def hitPlayer(self):
         temp = []

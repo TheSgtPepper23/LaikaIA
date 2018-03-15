@@ -10,6 +10,8 @@ from windows.message import Message
 from winWindow import Win
 from looseWindow import Loose
 from agenteInteligente import Agente
+import vlc
+from menuWindow import Menu
 
 class Game(QMainWindow):
     def __init__(self, language, side, ships, username, enemyShips):
@@ -21,6 +23,7 @@ class Game(QMainWindow):
         self.ships = ships
         self.enemyShips = enemyShips
         self.enemySons = []
+        self.clicked = []
         self.reload_text()
         self.determine_icon_side()
         self.populate_board()
@@ -30,9 +33,10 @@ class Game(QMainWindow):
         for ship in self.ships:
             for coordinate, _ in ship.positions.items():
                 self.player_table.item(coordinate.pos_x, coordinate.pos_y).setBackground(Qt.blue)
-        self.attack_button.setEnabled(True);
-        self.attack_button.clicked.connect(self.show_rival_table)
+
         self.player_table.cellClicked.connect(self.player_table.clearSelection)
+        self.attack_table.cellClicked.connect(self.enable_attack)
+        self.attack_button.clicked.connect(self.attack_opponent)
 
     def populate_board(self):
         """Populate all the cells with Coordinate objects"""
@@ -40,6 +44,16 @@ class Game(QMainWindow):
             for col in range(10):
                 coord = Coordinate(row, col)
                 self.player_table.setItem(row, col, coord)
+
+        for row in range(10):
+            for col in range(10):
+                coord = Coordinate(row, col)
+                self.attack_table.setItem(row, col, coord)
+        
+
+    def enable_attack(self):
+        """Enable the attack button for Attack"""
+        self.attack_button.setEnabled(True)
 
     def hit_coordinate(self):
         """Receive a signal from the server and hit a coordinate of the player_table"""
@@ -54,7 +68,43 @@ class Game(QMainWindow):
                 ship.hit(coordHit)
         if self.check_fleet() == False:
             self.lose_window = Loose(self.lang)
+            self.menu = Menu(self.lang, self.username)
+            self.menu.show()
             self.lose_window.show()
+            self.close()
+
+    def check_enemy_fleet(self):
+        """Check the enemy survivor ships"""
+        if len(self.enemyShips) > 0:
+            response = False
+            for ship in self.enemyShips:
+                if ship.afloat == True:
+                    response = True
+            return response
+
+    def attack_opponent(self):
+        """Send the coordinate to Server to hit the other player"""
+        coordHit = self.attack_table.item(self.attack_table.currentRow(), self.attack_table.currentColumn())
+        if coordHit in self.clicked:
+            self.attack_table.clearSelection()
+            error_sound = vlc.MediaPlayer("resources/error.mp3")
+            error_sound.play()
+        else:
+            self.attack_table.item(self.attack_table.currentRow(), self.attack_table.currentColumn()).setBackground(Qt.darkRed)
+            self.clicked.append(coordHit)
+            shoot_sound = vlc.MediaPlayer("resources/shoot.mp3")
+            shoot_sound.play()
+            for ship in self.enemyShips:
+                if ship.check_position(coordHit) == True:
+                    ship.hit(coordHit)
+            if self.check_enemy_fleet() == False:
+                self.menu = Menu(self.lang, self.username)
+                self.menu.show()
+                self.win_window = Win(self.lang)
+                self.win_window.show()
+                self.close()
+            self.hit_coordinate()
+        self.attack_table.clearSelection()
 
     def check_fleet(self):
         """Check that there are still surviving ships"""
@@ -69,6 +119,9 @@ class Game(QMainWindow):
         """Change the language of the window according to the chosen previously"""
         self.language = LANGUAGE.get(self.lang)
         self.setWindowTitle(self.language["game"])
+        self.language = LANGUAGE.get(self.lang)
+        self.attack_button.setText(self.language["attack"])
+
 
     def determine_icon_side(self):
         """Determine the icon to show from the selected previously"""
@@ -78,7 +131,4 @@ class Game(QMainWindow):
             side = QPixmap("resources/rebellion_icon.png")
         self.side_image.setPixmap(side)
 
-    def show_rival_table(self):
-        """Show the rival's table and their shots so far or determine the game winner"""
-        self.hit_coordinate()
-        self.attack.show()
+    
