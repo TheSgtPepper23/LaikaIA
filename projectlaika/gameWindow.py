@@ -52,6 +52,9 @@ class Game(QMainWindow):
             if ship.check_position(coordHit) == True:
                 self.player_table.item(coordHit.pos_x, coordHit.pos_y).setBackground(Qt.darkBlue)
                 ship.hit(coordHit)
+        if self.check_fleet() == False:
+            self.lose_window = Loose(self.lang)
+            self.lose_window.show()
 
     def check_fleet(self):
         """Check that there are still surviving ships"""
@@ -77,9 +80,5 @@ class Game(QMainWindow):
 
     def show_rival_table(self):
         """Show the rival's table and their shots so far or determine the game winner"""
-        if self.check_fleet() == False:
-            self.lose_window = Loose(self.lang)
-            self.lose_window.show()
-        else:
-            self.hit_coordinate()
-            self.attack.show()
+        self.hit_coordinate()
+        self.attack.show()
