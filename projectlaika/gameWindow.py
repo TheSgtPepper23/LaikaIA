@@ -30,10 +30,7 @@ class Game(QMainWindow):
         for ship in self.ships:
             for coordinate, _ in ship.positions.items():
                 self.player_table.item(coordinate.pos_x, coordinate.pos_y).setBackground(Qt.blue)
-
-        if self.side == "rebellion":
-            self.attack_button.setEnabled(True)
-
+        self.attack_button.setEnabled(True);
         self.attack_button.clicked.connect(self.show_rival_table)
         self.player_table.cellClicked.connect(self.player_table.clearSelection)
 
@@ -54,8 +51,6 @@ class Game(QMainWindow):
         for ship in self.ships:
             if ship.check_position(coordHit) == True:
                 ship.hit(coordHit)
-                if self.check_fleet == False:
-                    print("Ganó la IA")
 
     def check_fleet(self):
         """Check that there are still surviving ships"""
@@ -85,6 +80,5 @@ class Game(QMainWindow):
             self.lose_window = Loose(self.lang)
             self.lose_window.show()
         else:
-            self.attack_button.setEnabled(False)
             self.hit_coordinate()
             self.attack.show()

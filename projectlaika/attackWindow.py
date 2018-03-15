@@ -1,9 +1,11 @@
 import sys
 from PyQt5 import uic
+from PyQt5 import QtCore
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 from internationalization import LANGUAGE
 from logic import Coordinate
+from winWindow import Win
 import vlc
 
 
@@ -17,6 +19,7 @@ class Attack(QMainWindow):
         self.clicked = []
         self.reload_text()
         self.populate_board()
+        self.setWindowFlag(QtCore.Qt.WindowStaysOnTopHint)
         self.attack_table.cellClicked.connect(self.enable_attack)
         self.attack_button.clicked.connect(self.attack_opponent)
 
@@ -59,5 +62,6 @@ class Attack(QMainWindow):
                 if ship.check_position(coordHit) == True:
                     ship.hit(coordHit)
                     if self.check_enemy_fleet == False:
-                        print("Ganó Laglo")
+                        self.win_window = Win(self.lang)
+                        self.win_window.show()
             self.hide()

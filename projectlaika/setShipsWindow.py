@@ -247,7 +247,6 @@ class SetShips(QMainWindow):
         """send a signal to the other player to pass to the next window"""
         from gameWindow import Game
         from agenteInteligente import Agente
-
         enemy = Agente()
         self.enemyShips = enemy.setShips()
         self.game_window = Game(self.lang, self.side, self.ships, self.username, self.enemyShips)

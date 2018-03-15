@@ -57,6 +57,12 @@ class Agente:
             else:
                 return False
 
+    def sonBoundaries(self, row, col):
+        response = False
+        if 0 <= row <= 9 and 0 <= col <= 9:
+            response = True
+        return response
+
     def avalaible_cells(self, cells):
         """Verify that the selected cells are not occupied."""
         response = True
@@ -171,7 +177,7 @@ class Agente:
                 for i in range(-1, 2):
                     for j in range(-1, 2):
                         temp_coord = Coordinate(coord.pos_x + i, coord.pos_y + j)
-                        if self.boundaries(temp_coord.pos_x, temp_coord.pos_y, 1) and temp_coord not in self.hitted:
+                        if self.sonBoundaries(temp_coord.pos_x, temp_coord.pos_y) and temp_coord not in self.hitted:
                             self.hitted.append(temp_coord)
                             temp.append(temp_coord)
                 break
