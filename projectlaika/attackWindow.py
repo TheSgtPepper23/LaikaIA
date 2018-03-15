@@ -56,14 +56,14 @@ class Attack(QMainWindow):
             error_sound = vlc.MediaPlayer("resources/error.mp3")
             error_sound.play()
         else:
-            self.attack_table.item(self.attack_table.currentRow(), self.attack_table.currentColumn()).setBackground(Qt.black)
+            self.attack_table.item(self.attack_table.currentRow(), self.attack_table.currentColumn()).setBackground(Qt.darkRed)
             self.clicked.append(coordHit)
+            shoot_sound = vlc.MediaPlayer("resources/shoot.mp3")
+            shoot_sound.play()
             for ship in self.enemyShips:
                 if ship.check_position(coordHit) == True:
                     ship.hit(coordHit)
-            print("LLega")
             if self.check_enemy_fleet() == False:
-                print("Ganaste")
                 self.win_window = Win(self.lang)
                 self.win_window.show()
             self.hide()

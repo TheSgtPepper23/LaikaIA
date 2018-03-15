@@ -46,10 +46,11 @@ class Game(QMainWindow):
         if not self.enemySons:
             self.enemySons = self.agente.hitPlayer()
         coordHit = self.enemySons.pop(0)
-        self.player_table.item(coordHit.pos_x, coordHit.pos_y).setBackground(Qt.red)
+        self.player_table.item(coordHit.pos_x, coordHit.pos_y).setBackground(Qt.black)
         self.attack_button.setEnabled(True)
         for ship in self.ships:
             if ship.check_position(coordHit) == True:
+                self.player_table.item(coordHit.pos_x, coordHit.pos_y).setBackground(Qt.darkBlue)
                 ship.hit(coordHit)
 
     def check_fleet(self):
