@@ -27,9 +27,9 @@ class LogIn(QMainWindow):
     def log_in_success(self):
         """Determines if a player or administrator can enter to the game or
         player's administrator respectively"""
-        self.language=LANGUAGE.get(self.lang)
-        self.username=self.name_tf.text()
-        self.password=Hash.encrypt(self.pass_tf.text())
+        self.language = LANGUAGE.get(self.lang)
+        self.username = self.name_tf.text()
+        self.password = Hash.encrypt(self.pass_tf.text())
 
         database = DbMethods()
 
@@ -37,34 +37,33 @@ class LogIn(QMainWindow):
 
         if response == 2:
             from adminWindow import AdminWindow
-            self.admin=AdminWindow(self.lang)
+            self.admin = AdminWindow(self.lang)
             self.admin.show()
             self.close()
         elif response == 1:
             from menuWindow import Menu
-            self.menu=Menu(self.lang, self.username)
+            self.menu = Menu(self.lang, self.username)
             self.menu.show()
             self.close()
         elif response == 0:
             message = Message(
                 self.language["wrong_pass"], self.language["wrong_pass_text"])
-            information_mess=message.create_iw_message(
+            information_mess = message.create_iw_message(
                 self.language["ok"], "information")
             information_mess.exec()
         elif response == -1:
             message = Message(self.language["user_no"],
-                            self.language["fail_user"])
-            information_mess=message.create_iw_message(
+                              self.language["fail_user"])
+            information_mess = message.create_iw_message(
                 self.language["ok"], "information")
             information_mess.exec()
         elif response == None:
             print("ERrrp")
 
-
     def reload_text(self):
         """Change the language of the window according to the chosen
         previously"""
-        self.language=LANGUAGE.get(self.lang)
+        self.language = LANGUAGE.get(self.lang)
         self.username_label.setText(self.language["username"])
         self.name_tf.setPlaceholderText(
             self.language["username_placeholder_input"])
@@ -78,11 +77,11 @@ class LogIn(QMainWindow):
         """Determines what language is selected for the rest of the game"""
         self.lang_state = not self.lang_state
         if self.lang_state == True:
-            self.lang="en"
+            self.lang = "en"
             self.reload_text()
             self.flag_icon = QPixmap("resources/bandera_usa.png")
         else:
-            self.lang="es"
+            self.lang = "es"
             self.reload_text()
             self.flag_icon = QPixmap("resources/bandera_mexico.png")
 
