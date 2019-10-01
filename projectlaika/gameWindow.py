@@ -37,24 +37,21 @@ class Game(QMainWindow):
                     coordinate.pos_x, coordinate.pos_y).setBackground(Qt.blue)
 
         self.player_table.cellClicked.connect(self.player_table.clearSelection)
-        self.attack_table.cellClicked.connect(self.enable_attack)
-        self.attack_button.clicked.connect(self.attack_opponent)
+        self.attack_table.cellClicked.connect(self.attack_opponent)
+        # self.attack_button.clicked.connect(self.attack_opponent)
 
     def populate_board(self):
         """Populate all the cells with Coordinate objects"""
         for row in range(10):
             for col in range(10):
                 coord = Coordinate(row, col)
+                coord_attack = Coordinate(row, col)
                 self.player_table.setItem(row, col, coord)
+                self.attack_table.setItem(row, col, coord_attack)
 
-        for row in range(10):
-            for col in range(10):
-                coord = Coordinate(row, col)
-                self.attack_table.setItem(row, col, coord)
-
-    def enable_attack(self):
+    '''def enable_attack(self):
         """Enable the attack button for Attack"""
-        self.attack_button.setEnabled(True)
+        self.attack_button.setEnabled(True)'''
 
     def hit_coordinate(self):
         """Receive a signal from the server and hit a coordinate of the player_table"""
@@ -62,8 +59,8 @@ class Game(QMainWindow):
             self.enemySons = self.agente.hitPlayer()
         coordHit = self.enemySons.pop(0)
         self.player_table.item(
-            coordHit.pos_x, coordHit.pos_y).setBackground(Qt.black)
-        self.attack_button.setEnabled(True)
+            coordHit.pos_x, coordHit.pos_y).setBackground(Qt.gray)
+        # self.attack_button.setEnabled(True)
         for ship in self.ships:
             if ship.check_position(coordHit) == True:
                 self.player_table.item(
@@ -95,7 +92,7 @@ class Game(QMainWindow):
             error_sound.play()
         else:
             self.attack_table.item(self.attack_table.currentRow(
-            ), self.attack_table.currentColumn()).setBackground(Qt.darkRed)
+            ), self.attack_table.currentColumn()).setBackground(Qt.gray)
             self.clicked.append(coordHit)
             shoot_sound = vlc.MediaPlayer("resources/shoot.mp3")
             shoot_sound.play()
@@ -103,7 +100,7 @@ class Game(QMainWindow):
                 if ship.check_position(coordHit) == True:
                     ship.hit(coordHit)
                     self.attack_table.item(self.attack_table.currentRow(
-                    ), self.attack_table.currentColumn()).setBackground(Qt.black)
+                    ), self.attack_table.currentColumn()).setBackground(Qt.darkRed)
             if self.check_enemy_fleet() == False:
                 self.menu = Menu(self.lang, self.username)
                 self.menu.show()
@@ -127,7 +124,7 @@ class Game(QMainWindow):
         self.language = LANGUAGE.get(self.lang)
         self.setWindowTitle(self.language["game"])
         self.language = LANGUAGE.get(self.lang)
-        self.attack_button.setText(self.language["attack"])
+        # self.attack_button.setText(self.language["attack"])
 
     def determine_icon_side(self):
         """Determine the icon to show from the selected previously"""

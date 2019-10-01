@@ -108,7 +108,7 @@
      <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="attack_button">
+   <!--<widget class="QPushButton" name="attack_button">
     <property name="enabled">
      <bool>false</bool>
     </property>
@@ -128,7 +128,7 @@
     <property name="text">
      <string>ATTACK!</string>
     </property>
-   </widget>
+   </widget>-->
    <widget class="QTableWidget" name="attack_table">
     <property name="enabled">
      <bool>true</bool>
