@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QMessageBox
 from PyQt5.QtCore import Qt
 from windows.message import Message
 from internationalization import LANGUAGE
-from DatabaseAccess import DbMethods
+from databaseAccess import DbMethods
 
 class SearchWindow(QMainWindow):
     def __init__(self, lang):

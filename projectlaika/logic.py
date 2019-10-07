@@ -1,9 +1,12 @@
 from PyQt5.QtWidgets import QTableWidgetItem, QTableWidget
 import hashlib
+import enum
+
 
 class Coordinate(QTableWidgetItem):
     """Create a coordinate object with x and y positions.
     By default all the coordinates are available"""
+
     def __init__(self, pos_x, pos_y):
         QTableWidgetItem.__init__(self)
         self.pos_x = pos_x
@@ -19,9 +22,11 @@ class Coordinate(QTableWidgetItem):
     def __hash__(self):
         return hash((self.pos_x, self.pos_y))
 
+
 class Ship:
     """Initialize the ship and specify the coordinates where it is located.
     In the positions, 1 means that the position is OK and 0 that it has been hit."""
+
     def __init__(self, coordinates):
         self.positions = {}
         self.afloat = True
@@ -50,7 +55,14 @@ class Ship:
         """Change the state of the ship from floating to sunken"""
         self.afloat = False
 
+
 class Hash():
     def encrypt(text):
         return hashlib.sha256(text.encode()).hexdigest()
-            
+
+
+class CardinalDirections(enum.Enum):
+    North: 1
+    East: 2
+    South: 3
+    West: 4

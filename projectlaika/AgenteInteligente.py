@@ -1,5 +1,6 @@
-from logic import Coordinate, Ship
+from logic import Coordinate, Ship, CardinalDirections
 import random
+
 
 class Agente:
     def __init__(self):
@@ -13,7 +14,7 @@ class Agente:
             coordinate = self.random_cell()
             if self.place_52(coordinate.pos_x, coordinate.pos_y) == True:
                 break
-        
+
         while True:
             coordinate = self.random_cell()
             if self.place_41(coordinate.pos_x, coordinate.pos_y) == True:
@@ -33,9 +34,8 @@ class Agente:
             coordinate = self.random_cell()
             if self.place_11(coordinate.pos_x, coordinate.pos_y) == True:
                 break
-        
-        return self.ships
 
+        return self.ships
 
     def random_cell(self):
         pos_x = random.randint(0, 9)
@@ -44,7 +44,7 @@ class Agente:
             self.upright = not self.upright
         return Coordinate(pos_x, pos_y)
 
-    def boundaries(self, row, col, width, height = 1):
+    def boundaries(self, row, col, width, height=1):
         """Checks that the selected cells do not leave the boundaries of the board."""
         if self.upright == True:
             if row + width <= 10 and col + height <= 10:
@@ -68,21 +68,21 @@ class Agente:
         response = True
         for cell in cells:
             if cell in self.occupied:
-                response =  False
+                response = False
 
         return response
-            
+
     def place_ship(self, cells):
         for cell in cells:
             self.occupied.append(cell)
         ship = Ship(cells)
         self.ships.append(ship)
-    
+
     def place_52(self, row, col):
         """Print the 5x2 ship on the board based on the upright variable."""
         coordinates = []
         result = True
-        if self.boundaries (row, col, 5, 2):
+        if self.boundaries(row, col, 5, 2):
             if self.upright == False:
                 for x in range(5):
                     for y in range(2):
@@ -118,7 +118,7 @@ class Agente:
                 result = False
         else:
             result = False
-        return result        
+        return result
 
     def place_31(self, row, col):
         """Print the 3x1 ship on the board based on the upright variable."""
@@ -138,7 +138,6 @@ class Agente:
         else:
             result = False
         return result
-                
 
     def place_33(self, row, col):
         """Print the 3x3 ship on the board."""
@@ -155,7 +154,6 @@ class Agente:
         else:
             result = False
         return result
-                
 
     def place_11(self, row, col):
         """Print the 1x1 ship on the board."""
@@ -169,18 +167,29 @@ class Agente:
             result = False
         print(coordinates[0])
         return result
-        
-        
-    def hitPlayer(self):
-        temp = []
-        while True:
-            coord = self.random_cell()
-            if coord not in self.hitted:
-                for i in range(-1, 2):
-                    for j in range(-1, 2):
-                        temp_coord = Coordinate(coord.pos_x + i, coord.pos_y + j)
-                        if self.sonBoundaries(temp_coord.pos_x, temp_coord.pos_y) and temp_coord not in self.hitted:
-                            self.hitted.append(temp_coord)
-                            temp.append(temp_coord)
+
+    def hitPlayer(self, hitted=Coordinate(-1, -1)):
+        coordinates = []
+        if hitted.pos_x == -1:
+            while True:
+                coord = self.random_cell()
+                if coord not in self.hitted and self.sonBoundaries(coord.pos_x, coord.pos_y):
+                    coordinates.append(coord)
+                    break
+        else:
+            while True:
+                coordinates.append(Coordinate(
+                    hitted.pos_x + 1, hitted.pos_y))
+                coordinates.append(Coordinate(
+                    hitted.pos_x, hitted.pos_y + 1))
+                coordinates.append(Coordinate(
+                    hitted.pos_x - 1, hitted.pos_y))
+                coordinates.append(Coordinate(
+                    hitted.pos_x, hitted.pos_y - 1))
+
+                for i in range(len(coordinates) - 1, -1, -1):
+                    if self.sonBoundaries(coordinates[i].pos_x, coordinates[i].pos_y) == False or coordinates[i] in self.hitted:
+                        coordinates.pop(i)
                 break
-        return temp
+
+        return coordinates

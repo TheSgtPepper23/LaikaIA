@@ -24,6 +24,9 @@ class LogIn(QMainWindow):
         self.log_in_button.clicked.connect(self.log_in_success)
         self.flag_button.clicked.connect(self.choose_language)
 
+        self.name_tf.setText("Revo")
+        self.pass_tf.setText("12345678")
+
     def log_in_success(self):
         """Determines if a player or administrator can enter to the game or
         player's administrator respectively"""

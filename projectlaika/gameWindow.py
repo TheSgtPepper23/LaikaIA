@@ -4,7 +4,7 @@ from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 from internationalization import LANGUAGE
-from logic import Ship, Coordinate
+from logic import Ship, Coordinate, CardinalDirections
 from attackWindow import Attack
 from windows.message import Message
 from winWindow import Win
@@ -54,10 +54,11 @@ class Game(QMainWindow):
         self.attack_button.setEnabled(True)'''
 
     def hit_coordinate(self):
-        """Receive a signal from the server and hit a coordinate of the player_table"""
+
         if not self.enemySons:
             self.enemySons = self.agente.hitPlayer()
         coordHit = self.enemySons.pop(0)
+        self.agente.hitted.append(coordHit)
         self.player_table.item(
             coordHit.pos_x, coordHit.pos_y).setBackground(Qt.gray)
         # self.attack_button.setEnabled(True)
@@ -66,6 +67,8 @@ class Game(QMainWindow):
                 self.player_table.item(
                     coordHit.pos_x, coordHit.pos_y).setBackground(Qt.darkBlue)
                 ship.hit(coordHit)
+                self.enemySons = self.agente.hitPlayer(coordHit)
+
         if self.check_fleet() == False:
             self.lose_window = Loose(self.lang)
             self.menu = Menu(self.lang, self.username)
